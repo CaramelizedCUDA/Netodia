@@ -1,0 +1,1 @@
+fix(media-controls): keep Windows metadata current when artwork fails

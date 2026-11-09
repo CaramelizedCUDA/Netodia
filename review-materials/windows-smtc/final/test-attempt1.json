@@ -1,0 +1,34 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--workspace",
+    "--config",
+    "profile.test.package.netodia-views.debug=1"
+  ],
+  "platform": "Windows",
+  "head_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+  "base_commit": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+  "started_utc": "2026-11-09T13:01:03.996259+00:00",
+  "status": "completed",
+  "exit_code": 101,
+  "elapsed_seconds": 467.64,
+  "finished_utc": "2026-11-09T13:08:51.639928+00:00",
+  "test_binary_result_count": 0,
+  "totals": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered_out": 0
+  },
+  "failed_test_names": [],
+  "private_log_exported": false,
+  "failure_classification": {
+    "phase": "compilation_before_tests",
+    "rust_error": "E0786",
+    "windows_os_error": 1455,
+    "meaning": "Insufficient Windows commit/pagefile capacity while mapping netodia_ui rlib; no test assertions executed"
+  }
+}

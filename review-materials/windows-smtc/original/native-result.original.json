@@ -1,0 +1,69 @@
+﻿{
+    "binary_sha256":  "7f7960e204a86e2f883f50ac099d526c84ca059db8f3f9d024d10b8dd2a2acfc",
+    "checks":  [
+                   {
+                       "step":  "startup_restore_bad_cover",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true
+                   },
+                   {
+                       "step":  "play_and_progress",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true
+                   },
+                   {
+                       "step":  "next_good_cover",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true
+                   },
+                   {
+                       "step":  "pause",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true
+                   },
+                   {
+                       "step":  "resume",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true
+                   },
+                   {
+                       "step":  "previous_bad_cover",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true
+                   }
+               ],
+    "saved_position_matches":  true,
+    "position_advanced":  true,
+    "paused_position_stable":  true,
+    "good_local_cover_has_thumbnail":  true,
+    "artwork_fallback_count":  2,
+    "text_or_clear_failure_count":  0,
+    "original_instance_still_running":  true,
+    "test_instance_exited":  true,
+    "failure":  null,
+    "passed":  true
+}

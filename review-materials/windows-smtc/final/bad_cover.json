@@ -1,0 +1,229 @@
+﻿{
+    "schema_version":  2,
+    "source_patch_sha256":  "b5ac3e6c03ac9539ac0c2575246b635ef15993cd04df3a06b6e2a87df96b1162",
+    "source_snapshot_sha256":  "548f650fc5da08bc4bb2acb2754ca05c40ae93d84bcec823252548bad1222d96",
+    "binary_sha256":  "b0148070fe3a4053554ab864c6059256ddd082252b27ec2ef3c868e48b124987",
+    "acceptance_script_sha256":  "f6f12e6fb50d64a45aeb4d44d8543476df6c7bd9e3c461bae787bddb4f5f5e73",
+    "checks":  [
+                   {
+                       "step":  "startup_restore_bad_cover",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "A",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Paused",
+                       "actual_playback_status":  "Paused",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   },
+                   {
+                       "step":  "play_and_progress",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "A",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Playing",
+                       "actual_playback_status":  "Playing",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   },
+                   {
+                       "step":  "next_good_cover",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "B",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Playing",
+                       "actual_playback_status":  "Playing",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   },
+                   {
+                       "step":  "pause",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "B",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Paused",
+                       "actual_playback_status":  "Paused",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   },
+                   {
+                       "step":  "resume",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "B",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Playing",
+                       "actual_playback_status":  "Playing",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   },
+                   {
+                       "step":  "previous_bad_cover",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "A",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Playing",
+                       "actual_playback_status":  "Playing",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   }
+               ],
+    "transport_returns":  [
+                              {
+                                  "command":  "play_A",
+                                  "winrt_return_value":  true
+                              },
+                              {
+                                  "command":  "next_to_B",
+                                  "winrt_return_value":  true
+                              },
+                              {
+                                  "command":  "pause_B",
+                                  "winrt_return_value":  true
+                              },
+                              {
+                                  "command":  "resume_B",
+                                  "winrt_return_value":  true
+                              },
+                              {
+                                  "command":  "previous_to_A",
+                                  "winrt_return_value":  true
+                              }
+                          ],
+    "saved_position_matches":  true,
+    "position_advanced":  true,
+    "paused_position_stable":  true,
+    "good_local_cover_has_thumbnail":  true,
+    "next_track_position_advanced_before_pause":  true,
+    "artwork_attempt_failure_log_count":  2,
+    "text_or_clear_failure_log_count":  0,
+    "transport_return_meaning":  "SMTC command accepted, not set_metadata return value or audible output",
+    "log_observations":  {
+                             "evidence_kind":  "log_line_counts_not_metadata_return_values",
+                             "initial":  {
+                                             "artwork_attempt_failure_lines":  0,
+                                             "text_or_clear_failure_lines":  0,
+                                             "artwork_failure_hresult_counts":  {
+
+                                                                                }
+                                         },
+                             "final_after_process_exit":  {
+                                                              "artwork_attempt_failure_lines":  2,
+                                                              "text_or_clear_failure_lines":  0,
+                                                              "artwork_failure_hresult_counts":  {
+                                                                                                     "0X80070002":  2
+                                                                                                 }
+                                                          },
+                             "boundaries":  [
+                                                {
+                                                    "observation":  "startup_restore_bad_cover",
+                                                    "elapsed_ms":  733,
+                                                    "artwork_attempt_failure_lines_total":  1,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  1,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                },
+                                                {
+                                                    "observation":  "play_and_progress",
+                                                    "elapsed_ms":  6443,
+                                                    "artwork_attempt_failure_lines_total":  1,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  0,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                },
+                                                {
+                                                    "observation":  "next_good_cover",
+                                                    "elapsed_ms":  6742,
+                                                    "artwork_attempt_failure_lines_total":  1,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  0,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                },
+                                                {
+                                                    "observation":  "pause",
+                                                    "elapsed_ms":  12094,
+                                                    "artwork_attempt_failure_lines_total":  1,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  0,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                },
+                                                {
+                                                    "observation":  "resume",
+                                                    "elapsed_ms":  13319,
+                                                    "artwork_attempt_failure_lines_total":  1,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  0,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                },
+                                                {
+                                                    "observation":  "previous_bad_cover",
+                                                    "elapsed_ms":  13342,
+                                                    "artwork_attempt_failure_lines_total":  2,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  1,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                },
+                                                {
+                                                    "observation":  "after_test_process_exit",
+                                                    "elapsed_ms":  13682,
+                                                    "artwork_attempt_failure_lines_total":  2,
+                                                    "artwork_attempt_failure_lines_since_previous_observation":  0,
+                                                    "text_or_clear_failure_lines_total":  0,
+                                                    "text_or_clear_failure_lines_since_previous_observation":  0
+                                                }
+                                            ],
+                             "caveat":  "Buffered log delivery may shift a line across observation boundaries; counts do not prove text-only publication returned success."
+                         },
+    "position_assertions":  {
+                                "expected_restore_source":  "private queue-seed.json / current_position_ms, set by fixture preparation",
+                                "synthetic_expected_restore_ms":  1000,
+                                "restore_tolerance_ms":  100,
+                                "restore_match":  true,
+                                "minimum_advance_ms":  1000,
+                                "advance_timeout_seconds":  15,
+                                "advance_match":  true,
+                                "paused_sample_interval_ms":  1200,
+                                "paused_tolerance_ms":  100,
+                                "paused_stability_match":  true
+                            },
+    "metadata_native_return_values_captured":  false,
+    "audio_audibility_or_exclusive_output_asserted":  false,
+    "original_instance_still_running":  true,
+    "test_instance_exited":  true,
+    "failure":  null,
+    "passed":  true
+}

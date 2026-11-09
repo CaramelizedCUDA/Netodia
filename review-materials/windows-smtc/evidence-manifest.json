@@ -1,0 +1,246 @@
+{
+  "date": "2026-11-09",
+  "scope": "Sanitized Windows SMTC historical evidence and final upstream-integrated PR preparation",
+  "original_artifact_copies": [
+    {
+      "local_source_at_capture": "target/smtc_windows_acceptance.ps1",
+      "export_path": "original/native-acceptance.executed.ps1",
+      "byte_equal_at_capture": true,
+      "sha256": "d44fa5c27024a1663695b2d9da6ba16db568d225127b0f21bdbeb6f830390886"
+    },
+    {
+      "local_source_at_capture": "target/smtc-windows-acceptance-result.json",
+      "export_path": "original/native-result.original.json",
+      "byte_equal_at_capture": true,
+      "sha256": "c1128fa149ca562e50c9c33cd3dd2aac2186dc3e32cb1e01ee73c0bd5d156ccc"
+    }
+  ],
+  "linked_report": {
+    "path_from_repo_root": "Netodia-Windows-validation.md",
+    "sha256": "443991dd7ca23f98e72688e8411a6fb9c4566e22073f3bc227a04c391b8c8276"
+  },
+  "privacy_review": {
+    "method": "Schema review, personal-data and credential pattern scan, actual private queue metadata/URL comparison",
+    "pattern_scan_passed": true,
+    "private_queue_database_and_raw_logs_exported": false,
+    "detailed_review": "privacy-review.json"
+  },
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "92c5b7b4f56ad1f13531814d5d308df165a041e6da0c382c37f0c80e0190573e"
+    },
+    {
+      "path": "build-capture.json",
+      "sha256": "5a87c22fe62ebdd32de89c310fe0eed9bcf6214104fa45af26619cf21d18dd82"
+    },
+    {
+      "path": "capture_source.py",
+      "sha256": "4d37b9862f0abb8e89812e4e73998e1f6d167852144fbdbf9cbab11023fdee2b"
+    },
+    {
+      "path": "cleanup.replay.json",
+      "sha256": "eca14e423f26e1870ea82baf6839e2ed546c709164c5d1b7663d70eea7bef753"
+    },
+    {
+      "path": "derive_original_summary.py",
+      "sha256": "401bef76649d6a40d390d451355d1c673e1fae7a2c6ad12ede71b48117e4b1cd"
+    },
+    {
+      "path": "final/acceptance.bad_cover.ps1",
+      "sha256": "f6f12e6fb50d64a45aeb4d44d8543476df6c7bd9e3c461bae787bddb4f5f5e73"
+    },
+    {
+      "path": "final/bad_cover-attempt1/acceptance.ps1",
+      "sha256": "98899c48cf3d6a3d3fd572bd2b178a6999d17c33b3c4cad5e7660d687ae5554a"
+    },
+    {
+      "path": "final/bad_cover-attempt1/bad_cover.cleanup.json",
+      "sha256": "f3c4abcdcb6c1cc9a879dcc8c37003cdccb9d7d9664236eae1fd35941182103a"
+    },
+    {
+      "path": "final/bad_cover-attempt1/bad_cover.json",
+      "sha256": "cc090e2959d45785bd38763ab854e23b37e89347cd5c0dff3682b49cdece0790"
+    },
+    {
+      "path": "final/bad_cover.cleanup.json",
+      "sha256": "f3c4abcdcb6c1cc9a879dcc8c37003cdccb9d7d9664236eae1fd35941182103a"
+    },
+    {
+      "path": "final/bad_cover.json",
+      "sha256": "b80bcb3196dfc33ffb35ffbd36e6df88c195224f2f4cef58692eea5123c1e639"
+    },
+    {
+      "path": "final/build-capture.json",
+      "sha256": "5b6749ad6c8eac34206f1a5f4b26c0612f449bb0f3fdd88f742792f745dc22ff"
+    },
+    {
+      "path": "final/capture_source.py",
+      "sha256": "366deae498827c952d11c9936776321d573ef552cab1844e89f8f7b00a5b4cb1"
+    },
+    {
+      "path": "final/checks.json",
+      "sha256": "86e826592e9384e3d4a8d2e6f6a248f491d5766cc1d478ebde5931ab7a49a641"
+    },
+    {
+      "path": "final/publication.json",
+      "sha256": "3e60cbc308e52b3125cdb6a968ccbc37487cb5ad6f6f10803657850cccaaeab0"
+    },
+    {
+      "path": "final/README.md",
+      "sha256": "c392ce77262114b6309d889d27fcde7c12079e8461aac51d0a67580afb382b4d"
+    },
+    {
+      "path": "final/remote_cover.cleanup.json",
+      "sha256": "f3c4abcdcb6c1cc9a879dcc8c37003cdccb9d7d9664236eae1fd35941182103a"
+    },
+    {
+      "path": "final/remote_cover.json",
+      "sha256": "9d28c689353c4a3f2666c1b7c8e6783b279d9144ddb75327e65d1cdfe7ca643a"
+    },
+    {
+      "path": "final/run_native.ps1",
+      "sha256": "44f75d9cc6355bd06173b803324e657412f49f8cbd79cf1574cdc89c83b71f60"
+    },
+    {
+      "path": "final/scope-review.json",
+      "sha256": "12446f8efa07ff60448fb8e756344809881387f47bafea9d5358cc6515bbd78d"
+    },
+    {
+      "path": "final/source-capture.json",
+      "sha256": "2040ee089a1291e8b6075e9c2cc4f30a7953b6eb71dd0cd726c5bd6dc01396d6"
+    },
+    {
+      "path": "final/source.patch",
+      "sha256": "b5ac3e6c03ac9539ac0c2575246b635ef15993cd04df3a06b6e2a87df96b1162"
+    },
+    {
+      "path": "final/test-attempt1.json",
+      "sha256": "2d3b3395a4d2decf60b9d7dd337aca77f71fdec4686437c4220630656975f5b8"
+    },
+    {
+      "path": "final/test-subsets.json",
+      "sha256": "a55ea5fb3e060c7c1c624a170fb1c0f1c2d7fbbc71850a0870b26c31cd8a3c7b"
+    },
+    {
+      "path": "final/verify_final.py",
+      "sha256": "1e8915d4bf64496da6cb94f54404b53644b6b38cd0924a5a620b6a85bd4903db"
+    },
+    {
+      "path": "native-result.replay.json",
+      "sha256": "15eb1e7dff5b9f2a442998ca8c6e6a7dc714776c474533f79967a4deb4c34b14"
+    },
+    {
+      "path": "original/assertions.summary.json",
+      "sha256": "9726ef95ec8c27b362e5dfebdd5a40e4440dfd8a108e3457578c213bf20f05fe"
+    },
+    {
+      "path": "original/native-acceptance.executed.ps1",
+      "sha256": "d44fa5c27024a1663695b2d9da6ba16db568d225127b0f21bdbeb6f830390886"
+    },
+    {
+      "path": "original/native-result.original.json",
+      "sha256": "c1128fa149ca562e50c9c33cd3dd2aac2186dc3e32cb1e01ee73c0bd5d156ccc"
+    },
+    {
+      "path": "PR-draft.md",
+      "sha256": "151c8390dfd87d2c341dd3ae60a10ae77d4ff89a1c46532b1ae9c11e5bc29997"
+    },
+    {
+      "path": "PR-readiness.md",
+      "sha256": "99b7ccdf76da0ab6b311d92dfe96b3a0734009bf31439150f977c479fd6f251a"
+    },
+    {
+      "path": "PR-title.txt",
+      "sha256": "ea16aea424f2d6614e8fe54cd18dbf46ce2806d3f40af6d25adcaa67b20353d3"
+    },
+    {
+      "path": "privacy-review.json",
+      "sha256": "492aae20ceabd739175f707180252c3d368d5061f7e4957a61ea087c52347bfb"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e0f458065f46010a244de1e645b76314856dbf8f4bafa9e87ec69e4d093811c9"
+    },
+    {
+      "path": "remote/acceptance.ps1",
+      "sha256": "a600aeb2b1bef60a58c03e6383cfee23da71ada341976fc8171031ef51762922"
+    },
+    {
+      "path": "remote/attempt1/acceptance.ps1",
+      "sha256": "647c95a04b86cb9b0e5287ae9bf09c57a52aec53e7b87f5fde4e82855609dad1"
+    },
+    {
+      "path": "remote/attempt1/cleanup.json",
+      "sha256": "f3c4abcdcb6c1cc9a879dcc8c37003cdccb9d7d9664236eae1fd35941182103a"
+    },
+    {
+      "path": "remote/attempt1/native-result.json",
+      "sha256": "30383a3cfd0005bb448cc1075b9626b39c405fb5fd8a888fb5fb050f88b7467b"
+    },
+    {
+      "path": "remote/cleanup.json",
+      "sha256": "f3c4abcdcb6c1cc9a879dcc8c37003cdccb9d7d9664236eae1fd35941182103a"
+    },
+    {
+      "path": "remote/native-result.json",
+      "sha256": "3240709ea1bb6a830d8b7ee364d1e036b847f9891a4408e17867ab54074c5a51"
+    },
+    {
+      "path": "remote/prepare.py",
+      "sha256": "b3fde5cf284818de1f192bcd52f899168d7a9400f44c8264fb4669337d8dd54a"
+    },
+    {
+      "path": "remote/run.ps1",
+      "sha256": "38403b380f5ec52faab5b7db811fdfe14cff16e9929372b673cfd726bfc4eaa4"
+    },
+    {
+      "path": "replay/acceptance.ps1",
+      "sha256": "98899c48cf3d6a3d3fd572bd2b178a6999d17c33b3c4cad5e7660d687ae5554a"
+    },
+    {
+      "path": "replay/prepare.py",
+      "sha256": "dfbe549c856f6eb7d27dad54c31d7e25cfb3ef2dedb7370b02e835d280d75a27"
+    },
+    {
+      "path": "replay/run.ps1",
+      "sha256": "8e8e8a09e9a38a66e498ac412941e625204ea3e04a5c13c3c8c492fc0b7ca0cc"
+    },
+    {
+      "path": "source.patch",
+      "sha256": "86009027ada03b7aa737512bfad441fdbe135fed5869d8523e891fc78358f3e3"
+    },
+    {
+      "path": "upstream-check.json",
+      "sha256": "d185f074909e7bd6ea0ffc2cfac45927633f9236ba1baf6cf768dcea33c31e30"
+    },
+    {
+      "path": "verify_evidence.py",
+      "sha256": "f644b6cd460731fa3da35be4a601a804f39d54e82eed0af803ed4e26aeec7f08"
+    }
+  ],
+  "native_supplement": {
+    "result": "remote/native-result.json",
+    "attempts": 2,
+    "first_attempt_harness_failure_retained": "remote/attempt1/",
+    "producer_text_or_clear_failure_induced": false,
+    "automatic_retry_scheduler_claimed": false,
+    "scope": "Historical pre-integration CDN supplement; final native results are listed separately."
+  },
+  "final_source_files_unchanged_since_final_build_capture": true,
+  "historical_capture_scope": "Parent build-capture.json and native runs retain the old baseline; final/ binds the integrated commit. Root Cargo.toml inherited upstream changes.",
+  "final_commit": {
+    "base": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+    "head": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+    "build": "final/build-capture.json",
+    "checks": "final/checks.json",
+    "bad_cover": "final/bad_cover.json",
+    "remote_cover": "final/remote_cover.json",
+    "initial_pause_timeout_retained": "final/bad_cover-attempt1/",
+    "pause_timeout_cause_confirmed": false,
+    "ordinary_pause_precondition": "Next track native timeline advances by more than 1000 ms",
+    "full_text_publication_failure_induced": false,
+    "automatic_retry_scheduler_claimed": false
+  },
+  "git_byte_preservation": "Nested .gitattributes disables evidence text normalization; publication verifies every Git blob against its recorded local bytes."
+}

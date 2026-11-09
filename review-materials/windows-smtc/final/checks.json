@@ -1,0 +1,95 @@
+{
+  "test": {
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--workspace",
+      "--jobs",
+      "1",
+      "--config",
+      "profile.test.package.netodia-views.debug=1"
+    ],
+    "platform": "Windows",
+    "head_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+    "base_commit": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+    "started_utc": "2026-11-09T13:09:29.958941+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 117.578,
+    "finished_utc": "2026-11-09T13:11:27.529607+00:00",
+    "test_binary_result_count": 52,
+    "totals": {
+      "passed": 3530,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    "failed_test_names": [],
+    "private_log_exported": false
+  },
+  "clippy": {
+    "command": [
+      "cargo",
+      "clippy",
+      "--all-targets",
+      "--locked",
+      "--workspace",
+      "--jobs",
+      "1",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "platform": "Windows",
+    "head_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+    "base_commit": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+    "started_utc": "2026-11-09T13:12:16.620880+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 428.328,
+    "finished_utc": "2026-11-09T13:19:24.960621+00:00",
+    "private_log_exported": false
+  },
+  "fmt": {
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "platform": "Windows",
+    "head_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+    "base_commit": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+    "started_utc": "2026-11-09T13:02:23.310194+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 3.36,
+    "finished_utc": "2026-11-09T13:02:26.667518+00:00",
+    "private_log_exported": false
+  },
+  "build": {
+    "command": [
+      "cargo",
+      "build",
+      "--locked",
+      "-p",
+      "netodia",
+      "--jobs",
+      "1",
+      "--config",
+      "profile.dev.package.netodia-views.debug=1"
+    ],
+    "platform": "Windows",
+    "head_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+    "base_commit": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+    "started_utc": "2026-11-09T13:19:38.078527+00:00",
+    "status": "completed",
+    "exit_code": 0,
+    "elapsed_seconds": 868.844,
+    "finished_utc": "2026-11-09T13:34:06.923867+00:00",
+    "private_log_exported": false
+  }
+}

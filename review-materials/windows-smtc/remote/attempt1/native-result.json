@@ -1,0 +1,66 @@
+﻿{
+    "schema_version":  1,
+    "evidence_kind":  "real_cloud_playback_and_native_winrt_thumbnail_bytes",
+    "source_patch_sha256":  "86009027ada03b7aa737512bfad441fdbe135fed5869d8523e891fc78358f3e3",
+    "source_snapshot_sha256":  "32a0d82ffd51834e6afb8c3db5bc2fd6dd1c6b004687f425c34fda49441315b1",
+    "binary_sha256":  "db72c78051b56563d7959ff8d9e61a2df4479687918bc56de021b8a329000b32",
+    "acceptance_script_sha256":  "647c95a04b86cb9b0e5287ae9bf09c57a52aec53e7b87f5fde4e82855609dad1",
+    "preparation":  {
+                        "real_queue_remote_artwork_preserved":  true,
+                        "private_artwork_cache_initially_empty":  true,
+                        "unique_executable_basename":  true,
+                        "muted_shared_output":  true
+                    },
+    "checks":  [
+                   {
+                       "step":  "restore_remote_artwork_track",
+                       "evidence_kind":  "native_winrt_state_assertion",
+                       "expected_track_alias":  "A",
+                       "expected_source":  "private queue-seed.json / playlist_tracks",
+                       "actual_source":  "SMTC TryGetMediaPropertiesAsync and GetTimelineProperties",
+                       "expected_playback_status":  "Paused",
+                       "actual_playback_status":  "Paused",
+                       "title_matches":  true,
+                       "artist_matches":  true,
+                       "album_matches":  true,
+                       "duration_matches":  true,
+                       "status_matches":  true,
+                       "title_is_not_first":  true,
+                       "expected_track_match":  true
+                   }
+               ],
+    "transport_returns":  [
+                              {
+                                  "command":  "play_A",
+                                  "winrt_return_value":  true
+                              }
+                          ],
+    "observations":  {
+                         "local_cache_files_at_paused_restore":  0,
+                         "native_thumbnail_at_paused_restore":  false,
+                         "local_cache_files_after_play":  0,
+                         "native_thumbnail_sha256_matches_one_cached_file":  false,
+                         "matching_cache_path_is_absolute":  false,
+                         "no_additional_transport_commands_between_play_and_thumbnail_check":  true,
+                         "playing_position_advanced":  false,
+                         "thumbnail_hash_or_user_metadata_exported":  false
+                     },
+    "log_observations":  {
+                             "artwork_attempt_failure_lines":  0,
+                             "text_or_clear_failure_lines":  0,
+                             "artwork_failure_hresult_counts":  {
+
+                                                                }
+                         },
+    "metadata_native_return_values_captured":  false,
+    "full_text_publication_failure_induced":  false,
+    "retry_scheduler_validated":  false,
+    "original_instance_count_at_start":  1,
+    "original_instances_still_running":  true,
+    "test_instance_exited":  true,
+    "failure":  {
+                    "phase":  "download_cache_and_smtc_thumbnail",
+                    "error_type":  "System.Management.Automation.RuntimeException"
+                },
+    "passed":  false
+}

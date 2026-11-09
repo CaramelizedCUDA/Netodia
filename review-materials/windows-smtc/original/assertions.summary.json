@@ -1,0 +1,102 @@
+{
+  "evidence_kind": "derived_index_of_existing_original_artifact_not_a_new_execution",
+  "original_json_sha256": "c1128fa149ca562e50c9c33cd3dd2aac2186dc3e32cb1e01ee73c0bd5d156ccc",
+  "expected_metadata_source": "Private queue-seed.json / playlist_tracks; not database reads or manual visual judgement",
+  "actual_metadata_source": "Windows SMTC WinRT properties and timeline",
+  "cases": [
+    {
+      "case": "startup_restore_bad_cover",
+      "expected_track_alias_from_script": "A",
+      "expected_playback_status_from_script": "Paused",
+      "expected_track_match_derived": true,
+      "title_matches": true,
+      "artist_matches": true,
+      "album_matches": true,
+      "duration_matches": true,
+      "status_matches": true,
+      "title_is_not_first": true
+    },
+    {
+      "case": "play_and_progress",
+      "expected_track_alias_from_script": "A",
+      "expected_playback_status_from_script": "Playing",
+      "expected_track_match_derived": true,
+      "title_matches": true,
+      "artist_matches": true,
+      "album_matches": true,
+      "duration_matches": true,
+      "status_matches": true,
+      "title_is_not_first": true
+    },
+    {
+      "case": "next_good_cover",
+      "expected_track_alias_from_script": "B",
+      "expected_playback_status_from_script": "Playing",
+      "expected_track_match_derived": true,
+      "title_matches": true,
+      "artist_matches": true,
+      "album_matches": true,
+      "duration_matches": true,
+      "status_matches": true,
+      "title_is_not_first": true
+    },
+    {
+      "case": "pause",
+      "expected_track_alias_from_script": "B",
+      "expected_playback_status_from_script": "Paused",
+      "expected_track_match_derived": true,
+      "title_matches": true,
+      "artist_matches": true,
+      "album_matches": true,
+      "duration_matches": true,
+      "status_matches": true,
+      "title_is_not_first": true
+    },
+    {
+      "case": "resume",
+      "expected_track_alias_from_script": "B",
+      "expected_playback_status_from_script": "Playing",
+      "expected_track_match_derived": true,
+      "title_matches": true,
+      "artist_matches": true,
+      "album_matches": true,
+      "duration_matches": true,
+      "status_matches": true,
+      "title_is_not_first": true
+    },
+    {
+      "case": "previous_bad_cover",
+      "expected_track_alias_from_script": "A",
+      "expected_playback_status_from_script": "Playing",
+      "expected_track_match_derived": true,
+      "title_matches": true,
+      "artist_matches": true,
+      "album_matches": true,
+      "duration_matches": true,
+      "status_matches": true,
+      "title_is_not_first": true
+    }
+  ],
+  "original_position_booleans": {
+    "saved_position_matches": true,
+    "position_advanced": true,
+    "paused_position_stable": true
+  },
+  "position_rules_from_script": {
+    "restore_expected_ms": 1000,
+    "restore_tolerance_ms": 100,
+    "minimum_advance_ms": 1000,
+    "advance_timeout_seconds": 15,
+    "paused_sample_interval_ms": 1200,
+    "paused_tolerance_ms": 100
+  },
+  "original_log_observations": {
+    "artwork_attempt_failure_lines_delta": 2,
+    "text_or_clear_failure_lines_delta": 0,
+    "per_event_log_timestamps_retained": false,
+    "per_event_hresult_codes_retained": false,
+    "native_set_metadata_return_values_recorded": false,
+    "zero_failure_lines_means": "No matching failure log lines observed, not a complete native return-value trace"
+  },
+  "original_transport_return_values_recorded_as_fields": false
+}

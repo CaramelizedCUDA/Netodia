@@ -1,0 +1,32 @@
+{
+  "evidence_kind": "Derived from the completed final workspace test stdout",
+  "media_controls_tests_passed": 22,
+  "media_controls_test_names": [
+    "services::integrations::media_controls::published::tests::a_source_that_would_paint_the_same_panel_needs_no_write",
+    "services::integrations::media_controls::published::tests::a_source_arriving_or_leaving_is_always_a_write",
+    "services::integrations::media_controls::published::tests::a_failed_clear_keeps_the_previously_published_metadata",
+    "services::integrations::media_controls::published::tests::a_failed_metadata_write_stays_pending_while_other_changes_are_recorded",
+    "services::integrations::media_controls::published::tests::each_field_the_panel_draws_is_a_write_of_its_own",
+    "services::integrations::media_controls::published::tests::each_part_of_the_panel_is_flagged_on_its_own",
+    "services::integrations::media_controls::published::tests::nothing_held_and_nothing_playing_needs_no_write",
+    "services::integrations::media_controls::published::tests::a_view_model_already_recorded_changes_nothing",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::a_failed_clear_remains_pending_until_a_later_sync",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::a_new_song_does_not_wait_for_the_previous_songs_retry",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::a_refused_local_cover_still_publishes_the_current_song",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::a_remote_cover_waits_for_download_without_blocking_text",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::a_text_failure_without_artwork_is_not_retried_in_the_same_sync",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::absent_artist_and_album_clear_the_previous_songs_fields",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::clearing_metadata_explicitly_empties_the_previous_text",
+    "services::integrations::media_controls::souvlaki_backend::metadata_publishing_tests::failed_text_and_artwork_attempts_are_bounded_and_throttled",
+    "services::integrations::media_controls::souvlaki_backend::tests::a_position_too_wide_for_the_field_saturates",
+    "services::integrations::media_controls::souvlaki_backend::tests::every_transport_key_reaches_its_own_event",
+    "services::integrations::media_controls::souvlaki_backend::tests::the_events_this_layer_does_not_answer_reach_nothing",
+    "services::integrations::media_controls::tests::a_local_windows_cover_uses_the_separator_winrt_accepts",
+    "services::integrations::media_controls::tests::remote_covers_wait_for_the_apps_capped_download",
+    "services::integrations::media_controls::tests::uris_are_not_published_as_local_files"
+  ],
+  "netodia_net_tests_passed": 112,
+  "headless_scan_persists_track_passed": true,
+  "raw_test_log_exported": false,
+  "full_summary": "checks.json / test"
+}

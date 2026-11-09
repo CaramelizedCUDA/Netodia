@@ -1,0 +1,17 @@
+{
+  "reviewed_date": "2026-11-09",
+  "scope": "Exported Windows SMTC evidence, final commit records and linked report; private handoff excluded",
+  "method": [
+    "Export schema and script-output review",
+    "Personal username/profile path, QQ email and credential-header pattern scan",
+    "Exact substring scan against current private queue metadata/URLs of length at least eight characters"
+  ],
+  "scanned_files": 48,
+  "findings_count": 0,
+  "raw_queue_database_logs_or_artwork_exported": false,
+  "native_thumbnail_or_image_hash_exported": false,
+  "short_metadata_protection": "Outputs reviewed as booleans, aliases, protocol states, generic counters, test names and source/build hashes; private fixtures removed",
+  "intentional_public_account_information": "GitHub fork/account links and noreply identity required for publication; no private author email",
+  "limitations": "Pattern scan supplements schema review; not a systemwide write trace",
+  "git_export_byte_preservation": "Nested .gitattributes disables text normalization; every published blob is compared byte-for-byte before push."
+}

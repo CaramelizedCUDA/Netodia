@@ -1,0 +1,2 @@
+# Preserve executed scripts, BOMs and native output line endings for hash verification.
+* -text

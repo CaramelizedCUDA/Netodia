@@ -1,0 +1,17 @@
+{
+  "base_commit": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+  "head_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+  "commits_ahead": 1,
+  "changed_source_files": 5,
+  "all_reviewed_smtc_files_byte_identical": true,
+  "tracked_worktree_clean": true,
+  "new_commit_author_and_committer_use_verified_account_noreply": true,
+  "private_email_in_new_commit_metadata": false,
+  "assistant_coauthor_footer_present": false,
+  "fork": "CaramelizedCUDA/Netodia",
+  "upstream": "HELPMEEADICE/Netodia",
+  "code_branch": "codex/windows-smtc-metadata",
+  "push_default_remote": "fork",
+  "original_branch_retained_locally": true,
+  "no_manifests_network_protections_or_nonwindows_specific_paths_changed": true
+}

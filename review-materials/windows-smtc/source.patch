@@ -1,0 +1,471 @@
+diff --git a/crates/netodia-integrations/src/services/integrations/media_controls/mod.rs b/crates/netodia-integrations/src/services/integrations/media_controls/mod.rs
+index c5106d7d33b0535e553ff663d50d6582430b1d76..3d6ee58f6edc4d91cfeabcd656910110126fafcc 100644
+--- a/crates/netodia-integrations/src/services/integrations/media_controls/mod.rs
++++ b/crates/netodia-integrations/src/services/integrations/media_controls/mod.rs
+@@ -71,6 +71,23 @@ fn forward(tx: &mpsc::Sender<PlayerEvent>, event: PlayerEvent) {
+     }
+ }
+ 
++/// Publishes only local covers. Remote artwork is downloaded through the app's capped fetch
++/// before its cache path replaces the queue's URL.
++#[cfg(windows)]
++fn cover_url(artwork_path: &str) -> Option<String> {
++    if !std::path::Path::new(artwork_path).is_absolute() {
++        return None;
++    }
++    // WinRT's file loader rejects forward slashes even in an absolute Windows path.
++    let artwork_path = artwork_path.replace('/', std::path::MAIN_SEPARATOR_STR);
++    Some(format!("file://{artwork_path}"))
++}
++
++#[cfg(not(windows))]
+ fn cover_url(artwork_path: &str) -> String {
+     format!("file://{artwork_path}")
+ }
++
++#[cfg(all(test, windows))]
++#[path = "tests/cover_url_tests.rs"]
++mod tests;
+diff --git a/crates/netodia-integrations/src/services/integrations/media_controls/souvlaki_backend.rs b/crates/netodia-integrations/src/services/integrations/media_controls/souvlaki_backend.rs
+index fc7c3dfa78505367de77a3303062e982fc2af658..c0c937687e76af8a28844a44919d497ca9091323 100644
+--- a/crates/netodia-integrations/src/services/integrations/media_controls/souvlaki_backend.rs
++++ b/crates/netodia-integrations/src/services/integrations/media_controls/souvlaki_backend.rs
+@@ -9,16 +9,23 @@
+ 
+ use netodia_core::error::describe;
+ use netodia_engine::player::engine::event_sink::{MediaControlsSync, PlayerEvent};
++#[cfg(windows)]
++use netodia_engine::player::engine::now_playing::SourceSummary;
+ use netodia_engine::player::engine::state::{PlayerViewModelLight, amplitude_to_volume};
+ use netodia_engine::player::engine::types::PlaybackStatus;
+ 
+ use super::published::Published;
++#[cfg(windows)]
++use super::published::PublishedMetadata;
+ use super::{cover_url, forward};
+ 
+ /// How often a playing position is handed over. Both panels advance their own clock between
+ /// updates, so this only has to keep the two from visibly diverging.
+ const TIMELINE_REFRESH: Duration = Duration::from_secs(5);
+ 
++#[cfg(windows)]
++const METADATA_RETRY_INTERVAL: Duration = Duration::from_secs(5);
++
+ /// Wrapper around souvlaki's `MediaControls`.
+ /// `Option` allows graceful degradation when OS media controls are unavailable.
+ pub struct MediaControlsHandle {
+@@ -35,9 +42,50 @@ struct MediaControlsInner {
+     event_tx: mpsc::Sender<PlayerEvent>,
+     /// Last-synced state to avoid redundant SMTC calls on queue-only changes.
+     published: Published,
++    #[cfg(windows)]
++    metadata_retry: MetadataRetry,
+     last_timeline_push: Option<Instant>,
+ }
+ 
++/// A rejected snapshot waits between state emits; changed metadata can publish at once.
++#[cfg(windows)]
++#[derive(Default)]
++enum MetadataRetry {
++    #[default]
++    Ready,
++    Pending {
++        source: Option<PublishedMetadata>,
++        after: Instant,
++    },
++}
++
++#[cfg(windows)]
++impl MetadataRetry {
++    fn publish<E: std::error::Error>(
++        &mut self,
++        source: Option<&SourceSummary<'_>>,
++        now: Instant,
++        send: impl FnMut(MediaMetadata<'_>) -> Result<(), E>,
++    ) -> bool {
++        if let Self::Pending { source: held, after } = self
++            && now < *after
++            && PublishedMetadata::still_current(held.as_ref(), source)
++        {
++            return false;
++        }
++        let sent = publish_metadata(source, send);
++        *self = if sent {
++            Self::Ready
++        } else {
++            Self::Pending {
++                source: source.map(PublishedMetadata::from),
++                after: now + METADATA_RETRY_INTERVAL,
++            }
++        };
++        sent
++    }
++}
++
+ impl MediaControlsHandle {
+     /// macOS creates the controls eagerly, since it needs no window handle. On Windows,
+     /// souvlaki's SMTC backend `expect`s a non-null `HWND` in `PlatformConfig` and panics without
+@@ -66,6 +114,8 @@ pub(super) fn new(tx: mpsc::Sender<PlayerEvent>) -> Self {
+                 #[cfg(target_os = "windows")]
+                 event_tx: tx,
+                 published: Published::default(),
++                #[cfg(windows)]
++                metadata_retry: MetadataRetry::default(),
+                 last_timeline_push: None,
+             }),
+         }
+@@ -181,10 +231,21 @@ fn sync(&self, vm: &PlayerViewModelLight, status: PlaybackStatus) {
+         let inner = &mut *guard;
+ 
+         let changes = inner.published.changes(vm, status);
++        #[cfg(windows)]
++        let mut changes = changes;
+         let Some(controls) = inner.controls.as_mut() else {
+             return;
+         };
+ 
++        #[cfg(windows)]
++        if changes.metadata {
++            changes.metadata =
++                inner.metadata_retry.publish(vm.source().as_ref(), Instant::now(), |metadata| {
++                    controls.set_metadata(metadata)
++                });
++        }
++
++        #[cfg(target_os = "macos")]
+         if changes.metadata {
+             let source = vm.source();
+             if let Some(source) = source.as_ref() {
+@@ -236,6 +297,61 @@ fn update_position(&self, position_ms: u64) {
+     }
+ }
+ 
++/// Windows publishes the text only after loading the cover. Retry once without artwork so an
++/// unreadable file cannot keep the previous song on the panel. Accepted text settles this
++/// snapshot; changed artwork will trigger another publication.
++#[cfg(windows)]
++fn publish_metadata<E: std::error::Error>(
++    source: Option<&SourceSummary<'_>>,
++    mut send: impl FnMut(MediaMetadata<'_>) -> Result<(), E>,
++) -> bool {
++    let Some(source) = source else {
++        return match send(MediaMetadata {
++            title: Some(""),
++            artist: Some(""),
++            album: Some(""),
++            ..MediaMetadata::default()
++        }) {
++            Ok(()) => true,
++            Err(e) => {
++                log::debug!("Failed to clear media metadata: {}", describe(&e));
++                false
++            }
++        };
++    };
++
++    let artwork_url = source.artwork_path.and_then(cover_url);
++    let metadata = MediaMetadata {
++        title: Some(source.title),
++        artist: Some(source.secondary.unwrap_or("")),
++        album: Some(source.album.unwrap_or("")),
++        duration: source.duration_ms.map(Duration::from_millis),
++        cover_url: artwork_url.as_deref(),
++    };
++    match send(metadata.clone()) {
++        Ok(()) => true,
++        Err(e) => {
++            if metadata.cover_url.is_none() {
++                log::debug!("Failed to set media metadata: {}", describe(&e));
++                return false;
++            }
++            log::debug!("Failed to set media metadata with artwork: {}", describe(&e));
++            let text_only = MediaMetadata { cover_url: None, ..metadata };
++            match send(text_only) {
++                Ok(()) => true,
++                Err(e) => {
++                    log::debug!("Failed to set media metadata: {}", describe(&e));
++                    false
++                }
++            }
++        }
++    }
++}
++
+ #[cfg(test)]
+ #[path = "tests/souvlaki_backend_tests.rs"]
+ mod tests;
++
++#[cfg(all(test, windows))]
++#[path = "tests/metadata_publishing_tests.rs"]
++mod metadata_publishing_tests;
+diff --git a/crates/netodia-integrations/src/services/integrations/media_controls/tests/cover_url_tests.rs b/crates/netodia-integrations/src/services/integrations/media_controls/tests/cover_url_tests.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..0d38e75f8c216813f84b5761ad48606167e8bdbe
+--- /dev/null
++++ b/crates/netodia-integrations/src/services/integrations/media_controls/tests/cover_url_tests.rs
+@@ -0,0 +1,31 @@
++use std::path::{MAIN_SEPARATOR_STR, Path};
++
++use super::cover_url;
++
++#[test]
++fn remote_covers_wait_for_the_apps_capped_download() {
++    assert_eq!(cover_url("https://example.test/cover.jpg"), None);
++    assert_eq!(cover_url("http://example.test/cover.jpg"), None);
++    assert_eq!(cover_url("HTTPS://example.test/cover.jpg"), None);
++}
++
++#[test]
++fn uris_are_not_published_as_local_files() {
++    assert_eq!(cover_url("http://"), None);
++    assert_eq!(cover_url("https://"), None);
++    assert_eq!(cover_url("file:///cover.jpg"), None);
++    assert_eq!(cover_url("data:image/png;base64,AAAA"), None);
++    assert_eq!(cover_url("ftp://example.test/cover.jpg"), None);
++}
++
++#[test]
++fn a_local_windows_cover_uses_the_separator_winrt_accepts() {
++    let root = format!("C:{MAIN_SEPARATOR_STR}");
++    let path = Path::new(&root).join("artwork").join("cover.jpg");
++    let path = path.to_string_lossy();
++    let forward_slashes = path.replace(MAIN_SEPARATOR_STR, "/");
++    let expected = Some(format!("file://{path}"));
++
++    assert_eq!(cover_url(&path), expected);
++    assert_eq!(cover_url(&forward_slashes), expected);
++}
+diff --git a/crates/netodia-integrations/src/services/integrations/media_controls/tests/published_tests.rs b/crates/netodia-integrations/src/services/integrations/media_controls/tests/published_tests.rs
+index 17498e7a3b38cc1a864f468ad1a446268fdadc17..6524b20f1bfc91da3833d809ea97aec95be5f4f0 100644
+--- a/crates/netodia-integrations/src/services/integrations/media_controls/tests/published_tests.rs
++++ b/crates/netodia-integrations/src/services/integrations/media_controls/tests/published_tests.rs
+@@ -114,6 +114,35 @@ fn a_view_model_already_recorded_changes_nothing() {
+     assert_eq!(changes, NO_CHANGES);
+ }
+ 
++#[test]
++#[cfg(windows)]
++fn a_failed_metadata_write_stays_pending_while_other_changes_are_recorded() {
++    let vm = playing();
++    let mut published = Published::default();
++    let changes = Changes { metadata: false, ..published.changes(&vm, PlaybackStatus::Playing) };
++
++    published.record(&vm, PlaybackStatus::Playing, changes);
++
++    assert_eq!(
++        published.changes(&vm, PlaybackStatus::Playing),
++        Changes { metadata: true, ..NO_CHANGES },
++    );
++}
++
++#[test]
++#[cfg(windows)]
++fn a_failed_clear_keeps_the_previously_published_metadata() {
++    let vm = playing();
++    let mut published = published_after(&vm);
++    let empty = PlayerViewModelLight { current_track: None, ..vm.clone() };
++    let changes = Changes { metadata: false, ..published.changes(&empty, PlaybackStatus::Stopped) };
++
++    published.record(&empty, PlaybackStatus::Stopped, changes);
++
++    assert!(PublishedMetadata::still_current(published.metadata.as_ref(), vm.source().as_ref()));
++    assert!(published.changes(&empty, PlaybackStatus::Stopped).metadata);
++}
++
+ /// Each part moved alone flags that part and no other. A flag leaking into a neighbour is a signal
+ /// nobody asked for, and on MPRIS a position leaking into `status` is exactly the periodic
+ /// `PlaybackStatus` announcement this snapshot exists to stop.
+diff --git a/crates/netodia-integrations/src/services/integrations/media_controls/tests/metadata_publishing_tests.rs b/crates/netodia-integrations/src/services/integrations/media_controls/tests/metadata_publishing_tests.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..15aebc1bd6c9ad2d1da187d2dbf851545f5c724a
+--- /dev/null
++++ b/crates/netodia-integrations/src/services/integrations/media_controls/tests/metadata_publishing_tests.rs
+@@ -0,0 +1,188 @@
++use std::io;
++
++use netodia_engine::player::engine::now_playing::SourceId;
++
++use super::*;
++
++#[derive(Default)]
++struct Panel {
++    failures_remaining: usize,
++    covers: Vec<Option<String>>,
++    title: String,
++    artist: String,
++    album: String,
++    duration: Option<Duration>,
++}
++
++impl Panel {
++    fn send(&mut self, metadata: &MediaMetadata<'_>) -> io::Result<()> {
++        self.covers.push(metadata.cover_url.map(str::to_owned));
++        if self.failures_remaining > 0 {
++            self.failures_remaining -= 1;
++            return Err(io::Error::other("panel unavailable"));
++        }
++        if let Some(title) = metadata.title {
++            title.clone_into(&mut self.title);
++        }
++        if let Some(artist) = metadata.artist {
++            artist.clone_into(&mut self.artist);
++        }
++        if let Some(album) = metadata.album {
++            album.clone_into(&mut self.album);
++        }
++        self.duration = metadata.duration;
++        Ok(())
++    }
++}
++
++fn source() -> SourceSummary<'static> {
++    SourceSummary {
++        id: SourceId::Track(1),
++        title: "Current song",
++        secondary: Some("Artist"),
++        album: Some("Album"),
++        artwork_path: None,
++        duration_ms: Some(180_000),
++    }
++}
++
++#[test]
++fn a_remote_cover_waits_for_download_without_blocking_text() {
++    let source = SourceSummary { artwork_path: Some("https://example.test/cover.jpg"), ..source() };
++    let mut panel = Panel::default();
++
++    let sent = publish_metadata(Some(&source), |metadata| panel.send(&metadata));
++
++    assert!(sent);
++    assert_eq!(panel.covers, [None]);
++    assert_eq!(panel.title, source.title);
++    assert_eq!(panel.artist, "Artist");
++    assert_eq!(panel.album, "Album");
++    assert_eq!(panel.duration, Some(Duration::from_mins(3)));
++}
++
++#[test]
++fn absent_artist_and_album_clear_the_previous_songs_fields() {
++    let source = SourceSummary { secondary: None, album: None, ..source() };
++    let mut panel = Panel {
++        artist: "Previous artist".to_owned(),
++        album: "Previous album".to_owned(),
++        ..Panel::default()
++    };
++
++    let sent = publish_metadata(Some(&source), |metadata| panel.send(&metadata));
++
++    assert!(sent);
++    assert_eq!(panel.artist, "");
++    assert_eq!(panel.album, "");
++}
++
++#[test]
++fn a_refused_local_cover_still_publishes_the_current_song() {
++    let path = std::env::temp_dir().join("missing-cover.jpg");
++    let path = path.to_string_lossy();
++    let source = SourceSummary { artwork_path: Some(&path), ..source() };
++    let mut panel = Panel { failures_remaining: 1, ..Panel::default() };
++
++    let sent = publish_metadata(Some(&source), |metadata| panel.send(&metadata));
++
++    assert!(sent);
++    assert_eq!(panel.covers, [cover_url(&path), None]);
++    assert_eq!(panel.title, source.title);
++    assert_eq!(panel.duration, Some(Duration::from_mins(3)));
++}
++
++#[test]
++fn a_text_failure_without_artwork_is_not_retried_in_the_same_sync() {
++    let source = source();
++    let mut panel = Panel { failures_remaining: 1, ..Panel::default() };
++
++    let sent = publish_metadata(Some(&source), |metadata| panel.send(&metadata));
++
++    assert!(!sent);
++    assert_eq!(panel.covers, [None]);
++    assert_eq!(panel.title, "");
++}
++
++#[test]
++fn failed_text_and_artwork_attempts_are_bounded_and_throttled() {
++    let path = std::env::temp_dir().join("missing-cover.jpg");
++    let path = path.to_string_lossy();
++    let source = SourceSummary { artwork_path: Some(&path), ..source() };
++    let mut panel = Panel { failures_remaining: 2, ..Panel::default() };
++    let mut retry = MetadataRetry::default();
++    let now = Instant::now();
++
++    let sent = retry.publish(Some(&source), now, |metadata| panel.send(&metadata));
++    assert!(!sent);
++    assert_eq!(panel.covers, [cover_url(&path), None]);
++
++    let deferred = retry.publish(Some(&source), now, |metadata| panel.send(&metadata));
++    assert!(!deferred);
++    assert_eq!(panel.covers.len(), 2);
++
++    let recovered = retry
++        .publish(Some(&source), now + METADATA_RETRY_INTERVAL, |metadata| panel.send(&metadata));
++    assert!(recovered);
++    assert_eq!(panel.covers.len(), 3);
++    assert_eq!(panel.title, source.title);
++}
++
++#[test]
++fn a_new_song_does_not_wait_for_the_previous_songs_retry() {
++    let source = source();
++    let next = SourceSummary { title: "Next song", ..source };
++    let mut panel = Panel { failures_remaining: 1, ..Panel::default() };
++    let mut retry = MetadataRetry::default();
++    let now = Instant::now();
++
++    let refused = retry.publish(Some(&source), now, |metadata| panel.send(&metadata));
++    assert!(!refused);
++
++    let sent = retry.publish(Some(&next), now, |metadata| panel.send(&metadata));
++    assert!(sent);
++    assert_eq!(panel.title, next.title);
++    assert_eq!(panel.covers.len(), 2);
++}
++
++#[test]
++fn clearing_metadata_explicitly_empties_the_previous_text() {
++    let mut panel = Panel {
++        title: "Previous song".to_owned(),
++        artist: "Previous artist".to_owned(),
++        album: "Previous album".to_owned(),
++        duration: Some(Duration::from_mins(3)),
++        ..Panel::default()
++    };
++
++    let sent = publish_metadata(None, |metadata| panel.send(&metadata));
++
++    assert!(sent);
++    assert_eq!(panel.title, "");
++    assert_eq!(panel.artist, "");
++    assert_eq!(panel.album, "");
++    assert_eq!(panel.duration, None);
++    assert_eq!(panel.covers, [None]);
++}
++
++#[test]
++fn a_failed_clear_remains_pending_until_a_later_sync() {
++    let mut panel =
++        Panel { failures_remaining: 1, title: "Previous song".to_owned(), ..Panel::default() };
++    let mut retry = MetadataRetry::default();
++    let now = Instant::now();
++
++    let refused = retry.publish(None, now, |metadata| panel.send(&metadata));
++    assert!(!refused);
++    assert_eq!(panel.title, "Previous song");
++
++    let deferred = retry.publish(None, now, |metadata| panel.send(&metadata));
++    assert!(!deferred);
++    assert_eq!(panel.covers.len(), 1);
++
++    let cleared =
++        retry.publish(None, now + METADATA_RETRY_INTERVAL, |metadata| panel.send(&metadata));
++    assert!(cleared);
++    assert_eq!(panel.title, "");
++    assert_eq!(panel.covers.len(), 2);
++}

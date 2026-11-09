@@ -1,0 +1,80 @@
+{
+  "base_commit": "7c86a143d13db5141c711b275ec948bf684d5d48",
+  "local_head_commit": "483c0bcb4c69ebcd2d3653d1a821b8af84b02c5e",
+  "source_patch_sha256": "86009027ada03b7aa737512bfad441fdbe135fed5869d8523e891fc78358f3e3",
+  "source_snapshot_sha256": "32a0d82ffd51834e6afb8c3db5bc2fd6dd1c6b004687f425c34fda49441315b1",
+  "source_files": [
+    {
+      "path": ".cargo/config.toml",
+      "sha256": "18b70ee9e9fbe06a3a0be576f9931379a141c17351c04db17ea01841f8f64bf0"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "e4da0ddb8bc3b7b0aa31a5f575e6dae1fba214490b82db7f3ca2e8887fbde475"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "e59584a1813e3682347b1f65fa061415a51a563039220f3bd2ccc9da53bfd998"
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/mod.rs",
+      "sha256": "74a0a3badcd9de5ed49adb90983324b0cd8f280c3dfcd417e01bbe6ae984cc74"
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/souvlaki_backend.rs",
+      "sha256": "a41c096351c3a27a93754e516dd0f17518d0361615ff99e09a5a1c1adb40ddb4"
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/tests/cover_url_tests.rs",
+      "sha256": "55c53923b659b04dd4bc04c8df1238a3e89c0c905d29dae127ec008e409dac49"
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/tests/metadata_publishing_tests.rs",
+      "sha256": "d494c463a430e9575f10b08a6c57408395bac64f988b439334fe49b3a28635cc"
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/tests/published_tests.rs",
+      "sha256": "cabe5779f8b087f2bfeae2a00a394cbe8b8cf6ceb7a7574f97c09d51e4a90593"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "sha256": "1318c6648dcfaaa3ef9709a35b36eac03b6f119e3f9dd1a8dc877209644b898e"
+    }
+  ],
+  "patch_roundtrip": [
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/mod.rs",
+      "matches_worktree_bytes": true
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/souvlaki_backend.rs",
+      "matches_worktree_bytes": true
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/tests/cover_url_tests.rs",
+      "matches_worktree_bytes": true
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/tests/metadata_publishing_tests.rs",
+      "matches_worktree_bytes": true
+    },
+    {
+      "path": "crates/netodia-integrations/src/services/integrations/media_controls/tests/published_tests.rs",
+      "matches_worktree_bytes": true
+    }
+  ],
+  "build_command": [
+    "cargo",
+    "build",
+    "--locked",
+    "-p",
+    "netodia",
+    "--config",
+    "profile.dev.package.netodia-views.debug=1"
+  ],
+  "build_exit_code": 0,
+  "binary_sha256": "db72c78051b56563d7959ff8d9e61a2df4479687918bc56de021b8a329000b32",
+  "rustc_version": "rustc 1.97.0 (2d8144b78 2026-07-07)",
+  "cargo_version": "cargo 1.97.0 (c980f4866 2026-06-30)",
+  "provenance": "Captured in the evidence-supplement turn, before the instrumented replay; not a retroactive original-run build attestation."
+}

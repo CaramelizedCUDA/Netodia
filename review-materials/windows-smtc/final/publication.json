@@ -1,0 +1,12 @@
+{
+  "checked_utc": "2026-11-09T13:25:25.288569+00:00",
+  "fork": "CaramelizedCUDA/Netodia",
+  "upstream": "HELPMEEADICE/Netodia",
+  "upstream_main_verified": "d08a2d3584c59a87ba899fb6330c0910590579e3",
+  "code_branch": "codex/windows-smtc-metadata",
+  "published_code_commit": "fdd2bc728ecd37ddb6b962fc59a3c70089309f22",
+  "remote_code_sha_matches_local": true,
+  "evidence_branch": "codex/windows-smtc-evidence",
+  "pull_request_created": false,
+  "final_user_review_required_before_pr_creation": true
+}
